@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Solis.Sandbox", "Solis.Sandbox\Solis.Sandbox.csproj", "{529AF1BF-7233-46BF-9040-B0995500B5F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Solis", "Solis\Solis.csproj", "{ED735B3E-353A-410B-B459-00E23265CEBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{529AF1BF-7233-46BF-9040-B0995500B5F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{529AF1BF-7233-46BF-9040-B0995500B5F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{529AF1BF-7233-46BF-9040-B0995500B5F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{529AF1BF-7233-46BF-9040-B0995500B5F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED735B3E-353A-410B-B459-00E23265CEBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED735B3E-353A-410B-B459-00E23265CEBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED735B3E-353A-410B-B459-00E23265CEBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED735B3E-353A-410B-B459-00E23265CEBC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {301A00E8-8550-4955-8994-3665A248224B}
+	EndGlobalSection
+EndGlobal
