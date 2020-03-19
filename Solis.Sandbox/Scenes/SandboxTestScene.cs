@@ -1,4 +1,10 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using Solis.Rendering;
+using Solis.Scenes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +12,75 @@ using System.Threading.Tasks;
 
 namespace Solis.Sandbox.Scenes
 {
-    class SandboxTestScene
+    class SandboxTestScene : Scene
     {
-    }
+        SpriteBatch spriteBatch;
+        public SandboxTestScene(string sceneName) : base(sceneName)
+        {
+            Renderer = new SolisRenderer();
+        }
+
+        public override void Initialize()
+        {
+            spriteBatch = new SpriteBatch(SolisCore.Instance.GraphicsDevice);
+            base.Initialize();
+            
+        }
+
+        public override void LoadContent()
+        {
+            base.LoadContent();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            if (Input.IsKeyPressed(Keys.Space))
+            {
+                Content.LoadAsyncTextures(new string[] { "T_NoTexture", "T_DefaultTexture" }, textures);
+                Content.LoadAsyncSong("S_Viking", test);
+            }
+            if (Input.IsKeyPressed(Keys.Enter))
+            {
+                GC.Collect();
+            }
+            if (Input.IsKeyPressed(Keys.L))
+            {
+                Console.WriteLine("Currently {0} assets loaded", Content.AssetCount());
+            }
+
+        }
+
+        public void test(Song song)
+        {
+            Loaded = true;
+            var songs = Content.GetAssetSong("S_Viking");
+            MediaPlayer.Play(songs);
+        }
+
+        public void textures()
+        {
+            texturesLoaded = true;
+        }
+
+
+        
+        public override void Draw(GameTime gameTime)
+        {
+            if(spriteBatch != null)
+            {
+                base.Draw(gameTime);
+                spriteBatch.Begin();
+
+                if (texturesLoaded)
+                {
+                    spriteBatch.Draw(Content.GetAssetTexture("T_NoTexture"), new Rectangle(0, 0, 64, 64), Color.White);
+                    spriteBatch.Draw(Content.GetAssetTexture("T_DefaultTexture"), new Vector2(100, 100), Color.White);
+                }
+
+                spriteBatch.End();
+            }
+
+        }
+    }       
 }

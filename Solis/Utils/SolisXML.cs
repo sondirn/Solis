@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Solis.Utils
@@ -17,8 +13,8 @@ namespace Solis.Utils
             FileStream file = File.Create(path);
             try
             {
-            writer.Serialize(file, instance);
-            file.Close();
+                writer.Serialize(file, instance);
+                file.Close();
             }
             catch
             {

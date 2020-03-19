@@ -42,6 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\SolisContentManager.cs" />
+    <Compile Include="Input\Input.cs" />
+    <Compile Include="Input\InputUtils.cs" />
+    <Compile Include="Math\Mathf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\SolisRenderer.cs" />
     <Compile Include="Scenes\Scene.cs" />
@@ -49,5 +53,6 @@
     <Compile Include="Utils\SolisSettings.cs" />
     <Compile Include="Utils\SolisXML.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,12 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Solis.Rendering
+namespace Solis
 {
     public class SolisRenderer
     {
@@ -14,9 +10,9 @@ namespace Solis.Rendering
         public SpriteBatch SpriteBatch;
         public static Exception NULL_RENDER = new Exception("Renderer can not be null, please instantiate an instance of a renderer");
 
-        public SolisRenderer(GraphicsDeviceManager deviceManager)
+        public SolisRenderer()
         {
-            Graphics = deviceManager;
+            Graphics = SolisCore.Instance.GraphicsManager;
         }
 
         public virtual void Initialize()
@@ -31,19 +27,14 @@ namespace Solis.Rendering
 
         public virtual void UnloadContent()
         {
-
         }
 
         public virtual void Update(GameTime gameTime)
         {
-
         }
 
         public virtual void Draw(GameTime gameTime)
         {
-            SpriteBatch.Begin();
-
-            SpriteBatch.End();
         }
     }
 }

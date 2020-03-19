@@ -1,11 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Solis.Utils
+﻿namespace Solis
 {
     public class SolisSettings
     {
@@ -24,6 +17,5 @@ namespace Solis.Utils
             WINDOWED,
             BORDERLESS
         }
-
     }
 }

@@ -1,39 +1,37 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
-using Solis.Rendering;
+using Microsoft.Xna.Framework.Input;
+using Solis.Utils;
+using System;
 using System.Diagnostics;
 using System.IO;
-using Solis.Utils;
-using Microsoft.Xna.Framework.Input;
-using static Solis.Utils.SolisSettings;
-using Solis.Scenes;
+using static Solis.SolisSettings;
 
 namespace Solis
 {
     public class SolisCore : Game
     {
         #region members
+
         /// <summary>
         /// sets this core object as a service
         /// </summary>
         public new static GameServiceContainer Services => ((Game)_instance).Services;
+
         /// <summary>
         /// Accessors for core variables
         /// </summary>
         public static SolisCore Instance => _instance;
 
         internal static SolisCore _instance;
+
         /// <summary>
         /// Clear color of background
         /// </summary>
         public static Color ClearColor;
+
         /// <summary>
-        /// GraphicsDeviceManager 
+        /// GraphicsDeviceManager
         /// </summary>
         public GraphicsDeviceManager GraphicsManager;
 
@@ -52,8 +50,12 @@ namespace Solis
         /// </summary>
         public Scene CurrentScene;
 
-        #endregion
-        
+        public new static SolisContentManager Content;
+
+        private Scene _previousScene;
+
+        #endregion members
+
         #region Constructor
 
         /// <summary>
@@ -64,13 +66,17 @@ namespace Solis
         /// <param name="isFullScreen"></param>
         /// <param name="gameName"></param>
         /// <param name="contentDirectory"></param>
-        /// 
-        
+        ///
+
         public SolisCore(bool isFullScreen = false, string gameName = "SolisEngine", string contentDirectory = "Content")
         {
+            _instance = this;
+            Content = new SolisContentManager
+            {
+                RootDirectory = contentDirectory
+            };
             GameName = gameName;
             CheckSettingsFile();
-            _instance = this;
 
             CreateGraphicsDeviceManager();
 
@@ -84,20 +90,23 @@ namespace Solis
             Window.AllowUserResizing = GameSettings.AllowWindowAdjusting;
             IsMouseVisible = GameSettings.IsMouseVisible;
         }
-        #endregion
-        
+
+        #endregion Constructor
+
         #region Listeners
+
         /// <summary>
         /// handler when orientation is changed
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        /// 
-        
+        ///
+
         private void OnOrientationChanged(object sender, EventArgs e)
         {
             //throw new NotImplementedException();
         }
+
         /// <summary>
         /// handler when game is resized
         /// </summary>
@@ -110,11 +119,11 @@ namespace Solis
 
         public new static void Exit()
         {
-            ((Game) _instance).Exit();
+            ((Game)_instance).Exit();
         }
 
-        #endregion
-        
+        #endregion Listeners
+
         #region overrides
 
         protected override void Initialize()
@@ -132,6 +141,12 @@ namespace Solis
             base.Update(gameTime);
             DebugUpdate(gameTime);
             CurrentScene.Run(gameTime);
+            Input.Update();
+            if (_previousScene != null)
+            {
+                _previousScene.Content.Dispose();
+                _previousScene = null;
+            }
         }
 
         protected override void Draw(GameTime gameTime)
@@ -141,22 +156,23 @@ namespace Solis
             CurrentScene.Draw(gameTime);
         }
 
-        #endregion
+        #endregion overrides
 
         #region Debug Injection
 
 #if DEBUG
+
         //Debug Specific Variables
-        TimeSpan _frameCounterElapsedTime = new TimeSpan();
+        private TimeSpan _frameCounterElapsedTime = new TimeSpan();
 
 #endif
 
         [Conditional("DEBUG")]
-        void DebugUpdate(GameTime gameTime)
+        private void DebugUpdate(GameTime gameTime)
         {
 #if DEBUG
             _frameCounterElapsedTime += gameTime.ElapsedGameTime;
-            if(_frameCounterElapsedTime >= TimeSpan.FromSeconds(1))
+            if (_frameCounterElapsedTime >= TimeSpan.FromSeconds(1))
             {
                 int framerate = (int)(1 / (float)gameTime.ElapsedGameTime.TotalSeconds);
                 var totalMemory = (GC.GetTotalMemory(false) / 1048576f).ToString("F");
@@ -168,13 +184,14 @@ namespace Solis
 #endif
         }
 
-        #endregion
+        #endregion Debug Injection
 
         #region Helper Methods
+
         /// <summary>
         /// Checks if Settings file exists, if not then it will create a new settings file
         /// </summary>
-        void CheckSettingsFile()
+        private void CheckSettingsFile()
         {
             var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var folderPath = Path.Combine(path, "My Games", GameName);
@@ -185,14 +202,12 @@ namespace Solis
             }
             else
             {
-               
                 Directory.CreateDirectory(folderPath);
                 CreateSettingsFile();
-
             }
         }
 
-        void CreateSettingsFile()
+        private void CreateSettingsFile()
         {
             // Create New Settings File
             int w = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
@@ -211,7 +226,7 @@ namespace Solis
             Console.WriteLine("Created initial default settings file");
         }
 
-        void CreateGraphicsDeviceManager()
+        private void CreateGraphicsDeviceManager()
         {
             switch (GameSettings.WindowMode)
             {
@@ -224,6 +239,7 @@ namespace Solis
                         SynchronizeWithVerticalRetrace = GameSettings.Vsync
                     };
                     break;
+
                 case WINDOW_MODE.WINDOWED:
                     GraphicsManager = new GraphicsDeviceManager(this)
                     {
@@ -233,6 +249,7 @@ namespace Solis
                         SynchronizeWithVerticalRetrace = GameSettings.Vsync
                     };
                     break;
+
                 case WINDOW_MODE.BORDERLESS:
                     int w = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
                     int h = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
@@ -246,7 +263,7 @@ namespace Solis
                     Window.IsBorderless = true;
                     break;
             }
-            
+
             GraphicsManager.DeviceReset += OnGraphicsDeviceReset;
             GraphicsManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
         }
@@ -264,6 +281,12 @@ namespace Solis
             CurrentScene = scene;
         }
 
-        #endregion
+        public void ChangeScene(Scene newScene)
+        {
+            CurrentScene.Unload();
+            CurrentScene = newScene;
+        }
+
+        #endregion Helper Methods
     }
 }

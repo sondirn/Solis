@@ -1,53 +1,94 @@
 ﻿using Microsoft.Xna.Framework;
-using Solis.Rendering;
+using Microsoft.Xna.Framework.Media;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Solis.Scenes
+namespace Solis
 {
     public class Scene
     {
         public SolisRenderer Renderer;
         public string SceneName;
+        public SolisContentManager Content;
+        public bool SetToDispose;
+        public bool Loaded;
+        public bool texturesLoaded;
+        public bool testvar;
+
         public Scene(string sceneName, SolisRenderer renderer)
         {
+            SetToDispose = false;
+            Loaded = false;
+            texturesLoaded = false;
+            testvar = false;
             initialized = false;
             SolisCore.Instance.SetScene(this);
             SceneName = sceneName;
-            Renderer = renderer;
+            Content = SolisCore.Content;
         }
 
-        public virtual void Initialize() 
+        public Scene(string sceneName)
+        {
+            SetToDispose = false;
+            Loaded = false;
+            texturesLoaded = false;
+            testvar = false;
+            initialized = false;
+            Content = new SolisContentManager
+            {
+                RootDirectory = SolisCore.Content.RootDirectory
+            };
+            SolisCore.Instance.SetScene(this);
+            SceneName = sceneName;
+        }
+
+        public Scene()
+        {
+            SetToDispose = false;
+            Loaded = false;
+            texturesLoaded = false;
+            testvar = false;
+            initialized = false;
+            Content = new SolisContentManager
+            {
+                RootDirectory = SolisCore.Content.RootDirectory
+            };
+            SolisCore.Instance.SetScene(this);
+            SceneName = "NoName";
+        }
+
+        public virtual void Initialize()
         {
             if (Renderer != null)
                 Renderer.Initialize();
             else
                 throw new Exception("Please create a renderer");
         }
-        public virtual void LoadContent() 
+
+        public virtual void LoadContent()
         {
             Renderer.LoadContent();
         }
-        public virtual void Update(GameTime gameTime) 
+
+        public virtual void Update(GameTime gameTime)
         {
             Renderer.Update(gameTime);
         }
-        public virtual void Draw(GameTime gameTime) 
+
+        public virtual void Draw(GameTime gameTime)
         {
-            Renderer.Draw(gameTime);
+            if (Renderer != null)
+                Renderer.Draw(gameTime);
         }
 
         private bool initialized;
 
         public void Run(GameTime gameTime)
         {
-            if(!initialized)
+            if (!initialized)
             {
                 Initialize();
                 LoadContent();
+                initialized = true;
             }
             Update(gameTime);
         }
@@ -56,6 +97,12 @@ namespace Solis.Scenes
         {
             renderer = null;
             Renderer = renderer;
+        }
+
+        public virtual void Unload()
+        {
+            //Content.Dispose();
+            MediaPlayer.Stop();
         }
     }
 }
