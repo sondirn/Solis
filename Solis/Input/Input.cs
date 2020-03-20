@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace Solis
 {
@@ -14,6 +15,7 @@ namespace Solis
         private static MouseState _previousMouseState;
         private static MouseState _currentMouseState;
         private static int _maxSupportdGamePads;
+        static internal List<VirtualInput> _virtualInputs = new List<VirtualInput>();
 
         public static int MaxSupportedGamePads
         {
