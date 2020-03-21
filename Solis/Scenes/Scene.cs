@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Media;
 using System;
+using System.Collections.Generic;
 
 namespace Solis
 {
@@ -9,17 +10,10 @@ namespace Solis
         public SolisRenderer Renderer;
         public string SceneName;
         public SolisContentManager Content;
-        public bool SetToDispose;
-        public bool Loaded;
-        public bool texturesLoaded;
-        public bool testvar;
+
 
         public Scene(string sceneName, SolisRenderer renderer)
         {
-            SetToDispose = false;
-            Loaded = false;
-            texturesLoaded = false;
-            testvar = false;
             initialized = false;
             SolisCore.Instance.SetScene(this);
             SceneName = sceneName;
@@ -28,10 +22,6 @@ namespace Solis
 
         public Scene(string sceneName)
         {
-            SetToDispose = false;
-            Loaded = false;
-            texturesLoaded = false;
-            testvar = false;
             initialized = false;
             Content = new SolisContentManager
             {
@@ -43,10 +33,6 @@ namespace Solis
 
         public Scene()
         {
-            SetToDispose = false;
-            Loaded = false;
-            texturesLoaded = false;
-            testvar = false;
             initialized = false;
             Content = new SolisContentManager
             {

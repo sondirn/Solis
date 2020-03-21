@@ -43,6 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\SolisContentManager.cs" />
+    <Compile Include="Entity\Components\Component.cs" />
+    <Compile Include="Entity\Components\ComponentManager.cs" />
+    <Compile Include="Entity\Components\Transform.cs" />
+    <Compile Include="Entity\Components\Utils\DrawableComponent.cs" />
+    <Compile Include="Entity\Components\Utils\IUpdatable.cs" />
+    <Compile Include="Entity\Entity.cs" />
     <Compile Include="Input\Input.cs" />
     <Compile Include="Input\InputUtils.cs" />
     <Compile Include="Input\Virtual\VirtualButton.cs" />
@@ -50,6 +56,7 @@
     <Compile Include="Math\Mathf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\SolisRenderer.cs" />
+    <Compile Include="Scenes\Layers\DrawLayer.cs" />
     <Compile Include="Scenes\Scene.cs" />
     <Compile Include="SolisCore.cs" />
     <Compile Include="Utils\SolisSettings.cs" />
