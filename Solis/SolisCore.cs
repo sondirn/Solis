@@ -77,7 +77,11 @@ namespace Solis
             };
             GameName = gameName;
             CheckSettingsFile();
-
+            if (IsFixedTimeStep)
+            {
+                TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0f / GameSettings.TargetFrameRate);
+            }
+            
             CreateGraphicsDeviceManager();
 
             Window.ClientSizeChanged += OnGraphicsDeviceReset;
@@ -210,17 +214,18 @@ namespace Solis
         private void CreateSettingsFile()
         {
             // Create New Settings File
-            int w = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            int h = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            float w = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * .75f);
+            float h = (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height * .75f);
             GameSettings = new SolisSettings
             {
-                WindowMode = WINDOW_MODE.FULLSCREEN,
-                Vsync = true,
-                WindowWidth = w,
-                WindowHeight = h,
+                WindowMode = WINDOW_MODE.WINDOWED,
+                Vsync = false,
+                WindowWidth = (int)w,
+                WindowHeight = (int)h,
                 AllowWindowAdjusting = false,
                 IsMouseVisible = true,
-                IsFixedTimeStep = false
+                IsFixedTimeStep = true,
+                TargetFrameRate = 120
             };
             SaveSettings();
             Console.WriteLine("Created initial default settings file");

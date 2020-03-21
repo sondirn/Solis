@@ -25,6 +25,7 @@ namespace Solis.Sandbox
             if (Input.IsKeyPressed(Keys.M))
             {
                 ChangeScene(new SandboxTestScene("new scene"));
+                GC.Collect();
             }
         }
     }

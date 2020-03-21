@@ -19,8 +19,11 @@ namespace Solis
         public Transform Transform;
         public Entity(string name, Vector2 Position)
         {
+            Scene = SolisCore.Instance.CurrentScene;
             Components = new ComponentManager();
+            Id = Scene.EntityManager._entityIdHelper++;
             Transform = AddCompnoent(new Transform(Position));
+            Name = string.Format("{0}_{1}", Id, name);
         }
 
         public Entity() : this("NoName", Vector2.Zero)
@@ -45,6 +48,8 @@ namespace Solis
             component.OnStart();
             return component;
         }
+
+        public virtual void Destroy() { }
 
         
     }

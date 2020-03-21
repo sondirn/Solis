@@ -13,16 +13,18 @@ namespace Solis.Sandbox.Scenes
     class SandboxTestScene : Scene
     {
         SpriteBatch spriteBatch;
+        Entity testEntity;
+        bool texturesLoaded;
         public SandboxTestScene(string sceneName) : base(sceneName)
         {
             Renderer = new SolisRenderer();
+            texturesLoaded = false;
         }
 
         public override void Initialize()
         {
             spriteBatch = new SpriteBatch(SolisCore.Instance.GraphicsDevice);
             base.Initialize();
-            
         }
 
         public override void LoadContent()
@@ -45,15 +47,20 @@ namespace Solis.Sandbox.Scenes
             if (Input.IsKeyPressed(Keys.L))
             {
                 Console.WriteLine("Currently {0} assets loaded", Content.AssetCount());
+                Console.WriteLine("Currently {0} Entities exist", EntityCount());
+            }
+            if (Input.IsKeyPressed(Keys.K))
+            {
+                Console.WriteLine(CreateEntity(new Entity("EestEntity")).Name);
             }
 
         }
 
         public void test(Song song)
         {
-            Loaded = true;
             var songs = Content.GetAssetSong("S_Viking");
             MediaPlayer.Play(songs);
+            MediaPlayer.IsRepeating = true;
         }
 
         public void textures()

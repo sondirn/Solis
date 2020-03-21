@@ -10,6 +10,7 @@
         public bool AllowWindowAdjusting { get; set; }
         public bool IsMouseVisible { get; set; }
         public bool IsFixedTimeStep { get; set; }
+        public float TargetFrameRate { get; set; }
 
         public enum WINDOW_MODE
         {

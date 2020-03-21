@@ -10,6 +10,7 @@ namespace Solis
         public SolisRenderer Renderer;
         public string SceneName;
         public SolisContentManager Content;
+        internal EntityManager EntityManager;
 
 
         public Scene(string sceneName, SolisRenderer renderer)
@@ -17,7 +18,11 @@ namespace Solis
             initialized = false;
             SolisCore.Instance.SetScene(this);
             SceneName = sceneName;
-            Content = SolisCore.Content;
+            Content = Content = new SolisContentManager
+            {
+                RootDirectory = SolisCore.Content.RootDirectory
+            };
+            EntityManager = new EntityManager();
         }
 
         public Scene(string sceneName)
@@ -29,6 +34,7 @@ namespace Solis
             };
             SolisCore.Instance.SetScene(this);
             SceneName = sceneName;
+            EntityManager = new EntityManager();
         }
 
         public Scene()
@@ -40,6 +46,7 @@ namespace Solis
             };
             SolisCore.Instance.SetScene(this);
             SceneName = "NoName";
+            EntityManager = new EntityManager();
         }
 
         public virtual void Initialize()
@@ -57,6 +64,7 @@ namespace Solis
 
         public virtual void Update(GameTime gameTime)
         {
+            EntityManager.Update();
             Renderer.Update(gameTime);
         }
 
@@ -87,8 +95,20 @@ namespace Solis
 
         public virtual void Unload()
         {
-            //Content.Dispose();
             MediaPlayer.Stop();
+        }
+
+        public Entity CreateEntity(Entity entity)
+        {
+            return EntityManager.CreateEntity(entity);
+        }
+
+        public Entity CreateEntity(string name = "NoName") => EntityManager.CreateEntity(name);
+        
+
+        public int EntityCount()
+        {
+            return EntityManager.EntityCount();
         }
     }
 }

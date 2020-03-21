@@ -49,6 +49,7 @@
     <Compile Include="Entity\Components\Utils\DrawableComponent.cs" />
     <Compile Include="Entity\Components\Utils\IUpdatable.cs" />
     <Compile Include="Entity\Entity.cs" />
+    <Compile Include="Entity\EntityManager.cs" />
     <Compile Include="Input\Input.cs" />
     <Compile Include="Input\InputUtils.cs" />
     <Compile Include="Input\Virtual\VirtualButton.cs" />
