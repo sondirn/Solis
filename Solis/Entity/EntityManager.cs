@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,6 +79,13 @@ namespace Solis
         public Entity CreateEntity(string name = "NoName")
         {
             var entity = new Entity(name);
+            _entitiesToCreate.Enqueue(entity);
+            return entity;
+        }
+
+        public Entity CreateEntity(string name, Vector2 position)
+        {
+            var entity = new Entity(name, position);
             _entitiesToCreate.Enqueue(entity);
             return entity;
         }

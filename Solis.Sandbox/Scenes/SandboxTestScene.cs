@@ -51,7 +51,7 @@ namespace Solis.Sandbox.Scenes
             }
             if (Input.IsKeyPressed(Keys.K))
             {
-                Console.WriteLine(CreateEntity(new Entity("EestEntity")).Name);
+                Console.WriteLine("Created Entity: {0}",CreateEntity("TestEntity").Name);
             }
 
         }
