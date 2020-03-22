@@ -81,7 +81,7 @@ namespace Solis
             {
                 TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0f / GameSettings.TargetFrameRate);
             }
-            
+
             CreateGraphicsDeviceManager();
 
             Window.ClientSizeChanged += OnGraphicsDeviceReset;
@@ -144,8 +144,9 @@ namespace Solis
         {
             base.Update(gameTime);
             DebugUpdate(gameTime);
-            CurrentScene.Run(gameTime);
+            Time.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             Input.Update();
+            CurrentScene.Run(gameTime);
             if (_previousScene != null)
             {
                 _previousScene.Content.Dispose();
@@ -179,11 +180,11 @@ namespace Solis
             if (_frameCounterElapsedTime >= TimeSpan.FromSeconds(1))
             {
                 int framerate = (int)(1 / (float)gameTime.ElapsedGameTime.TotalSeconds);
-                var totalMemory = (GC.GetTotalMemory(false) / 1048576f).ToString("F");
+                var totalMemory = (Process.GetCurrentProcess().PrivateMemorySize64 / 1048576f).ToString("F");
                 Window.Title = string.Format("{0} {1} fps - {2} MB", GameName, framerate, totalMemory);
                 _frameCounterElapsedTime -= TimeSpan.FromSeconds(1);
             }
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (Input.IsKeyPressed(Keys.Escape))
                 Exit();
 #endif
         }
@@ -290,6 +291,7 @@ namespace Solis
         {
             CurrentScene.Unload();
             CurrentScene = newScene;
+            Time.SceneChanged();
         }
 
         #endregion Helper Methods

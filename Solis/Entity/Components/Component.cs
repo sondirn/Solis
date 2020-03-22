@@ -3,13 +3,15 @@
     public class Component
     {
         public Entity ParentEntity;
-        public virtual void OnStart()
-        {
-        }
+
+        public virtual void Initialize() { }
 
         public virtual void OnAddedToEntity()
         {
         }
 
+        public virtual void OnRevmoedFromEntity()
+        {
+        }
     }
 }

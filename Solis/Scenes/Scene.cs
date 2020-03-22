@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Media;
 using System;
-using System.Collections.Generic;
 
 namespace Solis
 {
@@ -11,7 +10,6 @@ namespace Solis
         public string SceneName;
         public SolisContentManager Content;
         internal EntityManager EntityManager;
-
 
         public Scene(string sceneName, SolisRenderer renderer)
         {
@@ -104,7 +102,8 @@ namespace Solis
         }
 
         public Entity CreateEntity(string name = "NoName") => EntityManager.CreateEntity(name);
-        
+
+        public Entity GetEntity(uint id) => EntityManager.GetEntity(id);
 
         public int EntityCount()
         {

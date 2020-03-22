@@ -1,79 +1,87 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Solis
 {
     public class ComponentManager
     {
-        Entity Entity;
-        List<Component> _components = new List<Component>();
-        List<IUpdatable> _updatableComponents = new List<IUpdatable>();
-        List<Component> _componentsToAdd = new List<Component>();
-        List<Component> _componentsToRemove = new List<Component>();
+        private Entity Entity;
+        private List<Component> _components = new List<Component>();
+        private List<IUpdatable> _updatableComponents = new List<IUpdatable>();
+        private Queue<Component> _componentsToAdd = new Queue<Component>();
+        private Queue<Component> _componentsToRemove = new Queue<Component>();
+
+        public ComponentManager(Entity entity)
+        {
+            Entity = entity;
+        }
 
         public void Update()
         {
-            //handle any removals
-            if(_componentsToRemove.Count > 0)
+            HandleComponentsToBeDestroyed();
+            HandleComponentsToBeAdded();
+            foreach (IUpdatable updatableComponent in _updatableComponents)
             {
-                foreach (var componentToBeRemoved in _componentsToRemove)
-                {
-                    _components.Remove(componentToBeRemoved);
-                }
-                _componentsToRemove.Clear();
+                updatableComponent.Update();
             }
+        }
 
-            if(_componentsToAdd.Count > 0)
+        public void HandleComponentsToBeAdded()
+        {
+            if (_componentsToAdd.Count > 0)
             {
-                foreach (var componentToBeAdded in _componentsToAdd)
+                for (int i = 0; i < _componentsToAdd.Count; i++)
                 {
-                    if (componentToBeAdded is IUpdatable)
-                        _updatableComponents.Add(componentToBeAdded as IUpdatable);
-                    if (componentToBeAdded is DrawableComponent)
-                    {
-                            
-                    }
-                       
-                    _components.Add(componentToBeAdded);
-                    componentToBeAdded.OnAddedToEntity();
+                    var componentToAdd = _componentsToAdd.Dequeue();
+                    _components.Add(componentToAdd);
+                    if (componentToAdd is IUpdatable)
+                        _updatableComponents.Add(componentToAdd as IUpdatable);
+                    componentToAdd.OnAddedToEntity();
                 }
+            }
+        }
 
-                _componentsToAdd.Clear();
+        public void HandleComponentsToBeDestroyed()
+        {
+            if (_componentsToRemove.Count > 0)
+            {
+                for (int i = 0; i < _componentsToRemove.Count; i++)
+                {
+                    var componentToDestroy = _componentsToRemove.Dequeue();
+                    _components.Remove(componentToDestroy);
+                    if (componentToDestroy is IUpdatable && _updatableComponents.Contains(componentToDestroy as IUpdatable))
+                        _updatableComponents.Remove(componentToDestroy as IUpdatable);
+                    componentToDestroy.OnRevmoedFromEntity();
+                }
             }
         }
 
         public void Add(Component component)
         {
-            _componentsToAdd.Add(component);
+            _componentsToAdd.Enqueue(component);
         }
 
         public void Remove(Component component)
         {
-            if (_componentsToAdd.Contains(component))
-            {
-                _componentsToAdd.Remove(component);
-                return;
-            }
+            _componentsToRemove.Enqueue(component);
+        }
 
-            _componentsToRemove.Add(component);
+        public T GetComponent<T>() where T : Component
+        {
+            for (int i = 0; i < _components.Count; i++)
+            {
+                var component = _components[i];
+                if (component is T)
+                    return component as T;
+            }
+            return null;
         }
 
         public void RemoveAllComponents()
         {
-            
+            _components.Clear();
+            _updatableComponents.Clear();
+            _componentsToAdd.Clear();
+            _componentsToRemove.Clear();
         }
-
-        public void HandleRemove(Component component)
-        {
-            if(component is DrawableComponent)
-            {
-
-            }
-               
-        }
-        
     }
 }

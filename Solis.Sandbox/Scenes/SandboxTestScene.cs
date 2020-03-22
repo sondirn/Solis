@@ -2,19 +2,17 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Solis.Sandbox.Compnoents;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Solis.Sandbox.Scenes
 {
-    class SandboxTestScene : Scene
+    internal class SandboxTestScene : Scene
     {
-        SpriteBatch spriteBatch;
-        Entity testEntity;
-        bool texturesLoaded;
+        private SpriteBatch spriteBatch;
+        private Entity testEntity;
+        private bool texturesLoaded;
+
         public SandboxTestScene(string sceneName) : base(sceneName)
         {
             Renderer = new SolisRenderer();
@@ -51,9 +49,12 @@ namespace Solis.Sandbox.Scenes
             }
             if (Input.IsKeyPressed(Keys.K))
             {
-                Console.WriteLine("Created Entity: {0}",CreateEntity("TestEntity").Name);
+                Console.WriteLine("Created Entity: {0}", CreateEntity("TestEntity").Name);
             }
-
+            if (Input.IsKeyPressed(Keys.I))
+            {
+                GetEntity(1).AddComponent<TestComponent>(new TestComponent("test"));
+            }
         }
 
         public void test(Song song)
@@ -68,11 +69,9 @@ namespace Solis.Sandbox.Scenes
             texturesLoaded = true;
         }
 
-
-        
         public override void Draw(GameTime gameTime)
         {
-            if(spriteBatch != null)
+            if (spriteBatch != null)
             {
                 base.Draw(gameTime);
                 spriteBatch.Begin();
@@ -85,7 +84,6 @@ namespace Solis.Sandbox.Scenes
 
                 spriteBatch.End();
             }
-
         }
-    }       
+    }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Solis
 {
@@ -11,7 +7,7 @@ namespace Solis
         public int LayerID { get; set; }
         public bool IsVisible { get; set; }
         public bool ShouldSort { get; set; }
-        List<DrawableComponent> _components;
+        private List<DrawableComponent> _components;
 
         public DrawLayer(int layer)
         {

@@ -9,9 +9,9 @@ namespace Solis.Editor
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);

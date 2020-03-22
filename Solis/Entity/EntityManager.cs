@@ -1,21 +1,43 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Solis
 {
     public class EntityManager
     {
-        Dictionary<uint, Entity> _entities;
-        List<Entity> _activeEntities;
-        List<Entity> _inactiveEntities;
-        Queue<Entity> _entitiesToCreate;
-        Queue<Entity> _entitiesToDestroy;
+        /// <summary>
+        /// Dictionary for quick access to entities by Id
+        /// </summary>
+        private Dictionary<uint, Entity> _entities;
+
+        /// <summary>
+        /// List for all active entities
+        /// </summary>
+        private List<Entity> _activeEntities;
+
+        /// <summary>
+        /// List for all inactive entities
+        /// </summary>
+        private List<Entity> _inactiveEntities;
+
+        /// <summary>
+        /// A queue that stores entities that need to be added
+        /// </summary>
+        private Queue<Entity> _entitiesToCreate;
+
+        /// <summary>
+        /// A queue that stores entities that need to be destroyed
+        /// </summary>
+        private Queue<Entity> _entitiesToDestroy;
+
+        /// <summary>
+        /// Variable that assists in assigning ID's to each entity
+        /// </summary>
         internal uint _entityIdHelper;
 
+        /// <summary>
+        /// Default constructor for Entity Manager
+        /// </summary>
         public EntityManager()
         {
             _entityIdHelper = 0;
@@ -25,6 +47,10 @@ namespace Solis
             _entitiesToCreate = new Queue<Entity>();
             _entitiesToDestroy = new Queue<Entity>();
         }
+
+        /// <summary>
+        /// Update method, here is where Entity qeues to be added/destroyed are processed. Also all active entities are updated here
+        /// </summary>
         public void Update()
         {
             HandleDestroy();
@@ -35,9 +61,12 @@ namespace Solis
             }
         }
 
+        /// <summary>
+        /// Function that handles entities in the EntitiestoDestroy queue
+        /// </summary>
         internal void HandleDestroy()
         {
-            if(_entitiesToDestroy.Count > 0)
+            if (_entitiesToDestroy.Count > 0)
             {
                 for (int i = 0; i < _entitiesToDestroy.Count; i++)
                 {
@@ -56,20 +85,29 @@ namespace Solis
             }
         }
 
+        /// <summary>
+        /// Function that handles entities in the EntitiesToCreate Queue
+        /// </summary>
         internal void HandleCreation()
         {
-            if(_entitiesToCreate.Count > 0)
+            if (_entitiesToCreate.Count > 0)
             {
                 for (int i = 0; i < _entitiesToCreate.Count; i++)
                 {
                     var entityToCreate = _entitiesToCreate.Dequeue();
                     _entities.Add(entityToCreate.Id, entityToCreate);
                     _activeEntities.Add(entityToCreate);
+                    entityToCreate.SetEnabled();
                     entityToCreate.OnAddedToScene();
                 }
             }
         }
 
+        /// <summary>
+        /// Creates an entity
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public Entity CreateEntity(Entity entity)
         {
             _entitiesToCreate.Enqueue(entity);
@@ -90,6 +128,10 @@ namespace Solis
             return entity;
         }
 
+        /// <summary>
+        /// Destroys an entity
+        /// </summary>
+        /// <param name="id"></param>
         public void DestroyEntity(uint id)
         {
             var entityToDestroy = _entities[id];
@@ -127,6 +169,11 @@ namespace Solis
                 _inactiveEntities.Add(entity);
             }
             return entity;
+        }
+
+        public Entity GetEntity(uint id)
+        {
+            return _entities[id];
         }
 
         public int EntityCount()
